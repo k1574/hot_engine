@@ -36,6 +36,7 @@ type Engine struct {
 	DT float64
 	WinCfg pixelgl.WindowConfig
 	Win *pixelgl.Window
+	Cam *Camera
 }
 
 func
@@ -46,7 +47,12 @@ func
 			o := e.Value.(Behaviorer)
 			o.Update()
 			od := o.GetO()
-			finmat := pixel.IM.ScaledXY(pixel.ZV, od.T.S).Rotated(pixel.ZV, od.T.R).Moved(od.T.P)
+			finmat := pixel.IM.ScaledXY(pixel.ZV, od.T.S).
+				Rotated(pixel.ZV, od.T.R).
+				Moved(od.T.P).
+				ScaledXY(pixel.ZV, od.E.Cam.T.S).
+				Rotated(od.E.Win.Bounds().Center(), od.E.Cam.T.R).
+				Moved(pixel.ZV.Sub(od.E.Cam.T.P))
 			if od.S != nil {
 				od.S.Draw(eng.Win, finmat)
 			}
@@ -72,6 +78,13 @@ New(cfg pixelgl.WindowConfig) (*Engine) {
 	eng := Engine {
 		Objects: list.New(),
 		WinCfg: cfg,
+		Cam: &Camera{
+			T: Transform {
+				S: pixel.Vec{1, 1},
+				R: 0,
+				P: pixel.Vec{0, 0},
+			},
+		},
 	}
 
 	return &eng

@@ -23,25 +23,26 @@ func
 		angle := &(g.O.T.R)
 		movSpeed := g.MoveSpeed
 		win := g.O.E.Win
+		cam := g.O.E.Cam
 		dt := g.O.E.DT
 		if win.Pressed(pixelgl.MouseButtonLeft){
-			click := win.MousePosition()
-			direction := click.Sub(*pos) 
+			click := win.MousePosition().Add(cam.T.P)
+			direction := click.Sub(*pos)
 			*angle = math.Atan(direction.Y/direction.X)
 			if direction.X < 0 { *angle += math.Pi }
 
 		}
 		if win.Pressed(pixelgl.KeyUp){
-			pos.Y += movSpeed*dt
+			cam.T.P.Y += movSpeed*dt
 		}
 		if win.Pressed(pixelgl.KeyDown){
-			pos.Y -= movSpeed*dt
+			cam.T.P.Y -= movSpeed*dt
 		}
 		if win.Pressed(pixelgl.KeyRight){
-			pos.X += movSpeed*dt
+			cam.T.P.X += movSpeed*dt
 		}
 		if win.Pressed(pixelgl.KeyLeft){
-			pos.X -= movSpeed*dt
+			cam.T.P.X -= movSpeed*dt
 		}
 }
 
