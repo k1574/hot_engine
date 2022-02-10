@@ -1,6 +1,17 @@
+package main
+
 import(
 	"hot_engine/m/engine"
+	"hot_engine/m/sprite"
+	"math"
+	"github.com/faiface/pixel/pixelgl"
+	"github.com/faiface/pixel"
 )
+
+type GopherPlayer struct {
+	O *engine.Object
+	MoveSpeed float64
+}
 
 func
 (g *GopherPlayer)Start() {
@@ -11,6 +22,8 @@ func
 		pos := &(g.O.T.P)
 		angle := &(g.O.T.R)
 		movSpeed := g.MoveSpeed
+		win := g.O.E.Win
+		dt := g.O.E.DT
 		if win.Pressed(pixelgl.MouseButtonLeft){
 			click := win.MousePosition()
 			direction := click.Sub(*pos) 
@@ -32,18 +45,44 @@ func
 		}
 }
 
-func
-(g *GopherPlayer)GetOD() *Object {
-	return &g.O
-}
+func (g *GopherPlayer)GetO() *engine.Object {return g.O}
 
 func
 main(){
-	eng = engine.New(pixelgl.WindowConfig{
+	eng := engine.New(pixelgl.WindowConfig{
 		Title: "Gopher Test",
 		Bounds: pixel.R(0, 0, 1024, 768),
 		VSync: true,
 	})
+
+	goph_sprite, err := sprite.LoadSprite("media/hiking.png")
+	if err != nil {
+		panic(err)
+	}
+
+	goph_player := GopherPlayer{
+		O: &engine.Object {
+			T: engine.Transform {
+				P: eng.WinCfg.Bounds.Center(),
+				S: pixel.Vec{1, 0.33},
+			},
+			S: goph_sprite,
+		},
+		MoveSpeed: 200.0,
+	}
+	eng.AddObject(&goph_player)
+	
+	goph_player1 := GopherPlayer{
+		O: &engine.Object {
+			T: engine.Transform {
+				P: pixel.ZV,
+				S: pixel.Vec{0.35, 0.35},
+			},
+			S: goph_sprite,
+		},
+		MoveSpeed: 100.0,
+	}
+	eng.AddObject(&goph_player1)
 
 	eng.Run()
 }

@@ -1,18 +1,12 @@
-package main
+package engine
 
 import (
 	"container/list"
-	"image"
-	"os"
 	"time"
-	"math"
-
-	_ "image/png"
-
+	//_ "image/png"
 	"github.com/faiface/pixel"
 	"github.com/faiface/pixel/pixelgl"
 	"golang.org/x/image/colornames"
-	//"fmt"
 )
 
 type Transform struct {
@@ -23,10 +17,11 @@ type Transform struct {
 type Behaviorer interface {
 	Start()
 	Update()
-	GetOD() *Object
+	GetO() *Object
 }
 
 type Object struct {
+	E *Engine
 	T Transform
 	S *pixel.Sprite
 }
@@ -35,95 +30,71 @@ type Camera struct {
 	T Transform
 }
 
-type GopherPlayer struct {
-	O Object
-	MoveSpeed float64
-}
-
 type Engine struct {
-	lasttime time.Time
-	objects *list.List
+	lastTime time.Time
+	Objects *list.List
 	DT float64
-	wcfg pixelgl.WindowConfig
-	win *pixelgl.Window
+	WinCfg pixelgl.WindowConfig
+	Win *pixelgl.Window
 }
 
 func
-(engine *Engine)Update(){
-		for e := engine.objects.Front() ; e != nil ; e = e.Next() {
+(eng *Engine)update(){
+		eng.Win.Clear(colornames.Whitesmoke)
+		eng.setNewDT()
+		for e := eng.Objects.Front() ; e != nil ; e = e.Next() {
 			o := e.Value.(Behaviorer)
 			o.Update()
-			od := o.GetOD()
+			od := o.GetO()
 			finmat := pixel.IM.ScaledXY(pixel.ZV, od.T.S).Rotated(pixel.ZV, od.T.R).Moved(od.T.P)
-			od.S.Draw(win, finmat)
+			if od.S != nil {
+				od.S.Draw(eng.Win, finmat)
+			}
 		}
+		eng.Win.Update()
 }
 
 func
-(engine *Engine)setNewDT(){
-	engine.dt = time.Since(engine.lasttime).Seconds()
-	engine.lasttime = time.Now()
+(eng *Engine)setNewDT(){
+	eng.DT = time.Since(eng.lastTime).Seconds()
+	eng.lastTime = time.Now()
 }
-
 
 func
-AddObject(o *Behaviorer) {
-	objects.PushBack(o)
-	o.Start()
+(eng *Engine)AddObject(v Behaviorer) {
+	eng.Objects.PushBack(v)
+	v.GetO().E = eng
+	v.Start()
 }
 
-func run() {
-	win, err = pixelgl.NewWindow(cfg)
+func
+New(cfg pixelgl.WindowConfig) (*Engine) {
+	eng := Engine {
+		Objects: list.New(),
+		WinCfg: cfg,
+	}
+
+	return &eng
+}
+
+func
+(eng *Engine)run() {
+	var err error
+
+	eng.Win, err = pixelgl.NewWindow(eng.WinCfg)
 	if err != nil {
 		panic(err)
 	}
-	win.SetSmooth(true)
+	eng.Win.SetSmooth(true)
 
-	pic, err := loadPicture("../hiking.png")
-	if err != nil {
-		panic(err)
-	}
-
-	goph_sprite = pixel.NewSprite(pic, pic.Bounds())
-	objects = list.New()
-
-	goph_player := GopherPlayer{
-		O: Object {
-			T: Transform {
-				P: win.Bounds().Center(),
-				S: pixel.Vec{3, 1},
-			},
-			S: goph_sprite,
-		},
-		MoveSpeed: 200.0,
-	}
-	AddObject(&goph_player)
-	
-	goph_player1 := GopherPlayer{
-		O: Object {
-			T: Transform {
-				P: pixel.ZV,
-				S: pixel.Vec{1, 1},
-			},
-			S: goph_sprite,
-		},
-		MoveSpeed: 100.0,
-	}
-	AddObject(&goph_player1)
-
-	lasttime = time.Now()
-	for !win.Closed() {
-		setDT()
-		win.Clear(colornames.Whitesmoke)
-
-
-		win.Update()
+	eng.lastTime = time.Now()
+	for !eng.Win.Closed() {
+		eng.update()
 	}
 }
 
-
-
-func Run {
-	pixelgl.Run(run)
+func
+(eng *Engine)Run() {
+	pixelgl.Run(eng.run)
 }
 

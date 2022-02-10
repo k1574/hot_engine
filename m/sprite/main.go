@@ -1,13 +1,27 @@
+package sprite
 
-func LoadPicture(path string) (pixel.Picture, error) {
+import (
+	"github.com/faiface/pixel"
+	"os"
+	"image"
+	_ "image/png"
+)
+
+func 
+LoadSprite(path string) (*pixel.Sprite, error) {
 	file, err := os.Open(path)
 	if err != nil {
 		return nil, err
 	}
 	defer file.Close()
+
 	img, _, err := image.Decode(file)
 	if err != nil {
 		return nil, err
 	}
-	return pixel.PictureDataFromImage(img), nil
+
+	pic := pixel.PictureDataFromImage(img)	
+	sprite := pixel.NewSprite(pic, pic.Bounds())
+
+	return sprite, nil
 }
