@@ -50,9 +50,12 @@ func
 			finmat := pixel.IM.ScaledXY(pixel.ZV, od.T.S).
 				Rotated(pixel.ZV, od.T.R).
 				Moved(od.T.P).
-				ScaledXY(pixel.ZV, od.E.Cam.T.S).
-				Rotated(od.E.Win.Bounds().Center(), od.E.Cam.T.R).
-				Moved(pixel.ZV.Sub(od.E.Cam.T.P))
+				Rotated(od.E.Cam.T.P.Add(od.E.Win.Bounds().Center()),
+					od.E.Cam.T.R).
+				Moved(pixel.ZV.Sub(od.E.Cam.T.P)).
+				ScaledXY(od.E.Cam.T.P.Add(od.E.Win.Bounds().Center()),
+					od.E.Cam.T.S)
+
 			if od.S != nil {
 				od.S.Draw(eng.Win, finmat)
 			}
