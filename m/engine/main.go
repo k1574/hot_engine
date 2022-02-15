@@ -7,28 +7,11 @@ import (
 	"github.com/faiface/pixel"
 	"github.com/faiface/pixel/pixelgl"
 	"golang.org/x/image/colornames"
+	"hot/m/engine/camera"
+	"hot/m/engine/transform"
+	"hot/m/engine/vector"
+	"hot/m/engine/behaviorer"
 )
-
-type Transform struct {
-	P, S pixel.Vec
-	R float64
-}
-
-type Behaviorer interface {
-	Start()
-	Update()
-	GetO() *Object
-}
-
-type Object struct {
-	E *Engine
-	T Transform
-	S *pixel.Sprite
-}
-
-type Camera struct {
-	T Transform
-}
 
 type Engine struct {
 	lastTime time.Time
@@ -36,7 +19,7 @@ type Engine struct {
 	DT float64
 	WinCfg pixelgl.WindowConfig
 	Win *pixelgl.Window
-	Cam *Camera
+	Cam *camera.Camera
 }
 
 func
@@ -44,17 +27,22 @@ func
 		eng.Win.Clear(colornames.Whitesmoke)
 		eng.setNewDT()
 		for e := eng.Objects.Front() ; e != nil ; e = e.Next() {
-			o := e.Value.(Behaviorer)
+			o := e.Value.(behaviorer.Behaviorer)
 			o.Update()
+
 			od := o.GetO()
+			if od == nil {
+				continue
+			}
+
 			finmat := pixel.IM.ScaledXY(pixel.ZV, od.T.S).
-				Rotated(pixel.ZV, od.T.R).
+				Rotated(vector.Z, od.T.R).
 				Moved(od.T.P).
-				Rotated(od.E.Cam.T.P.Add(od.E.Win.Bounds().Center()),
-					od.E.Cam.T.R).
-				Moved(pixel.ZV.Sub(od.E.Cam.T.P)).
-				ScaledXY(od.E.Cam.T.P.Add(od.E.Win.Bounds().Center()),
-					od.E.Cam.T.S)
+				Rotated(eng.Cam.T.P.Add(eng.Win.Bounds().Center()),
+					eng.Cam.T.R).
+				Moved(vector.Z.Sub(eng.Cam.T.P)).
+				ScaledXY(eng.Cam.T.P.Add(eng.Win.Bounds().Center()),
+					eng.Cam.T.S)
 
 			if od.S != nil {
 				od.S.Draw(eng.Win, finmat)
@@ -70,9 +58,8 @@ func
 }
 
 func
-(eng *Engine)AddObject(v Behaviorer) {
+(eng *Engine)AddBehaviorer(v behaviorer.Behaviorer) {
 	eng.Objects.PushBack(v)
-	v.GetO().E = eng
 	v.Start()
 }
 
@@ -81,13 +68,12 @@ New(cfg pixelgl.WindowConfig) (*Engine) {
 	eng := Engine {
 		Objects: list.New(),
 		WinCfg: cfg,
-		Cam: &Camera{
-			T: Transform {
-				S: pixel.Vec{1, 1},
-				R: 0,
-				P: pixel.Vec{0, 0},
-			},
-		},
+		Cam: camera.New(
+			transform.New(
+				vector.New(1, 1),
+				vector.New(1, 1),
+				0),
+			),
 	}
 
 	return &eng

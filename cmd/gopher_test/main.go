@@ -1,21 +1,27 @@
 package main
 
 import(
-	"hot_engine/m/engine"
-	"hot_engine/m/sprite"
 	"math"
+	"fmt"
 	"github.com/faiface/pixel/pixelgl"
 	"github.com/faiface/pixel"
-	"fmt"
+	"hot/m/engine"
+	"hot/m/engine/sprite"
+	"hot/m/engine/object"
+	"hot/m/engine/vector"
+	"hot/m/engine/transform"
+)
+
+var(
+	eng *engine.Engine
 )
 
 type GopherPlayer struct {
-	O *engine.Object
+	O *object.Object
 	MoveSpeed float64
 }
 
-type Camera struct {
-	O *engine.Object
+type CameraPlayer struct {
 	RotationSpeed float64
 	PositionSpeed float64
 }
@@ -29,9 +35,9 @@ func
 		pos := &(g.O.T.P)
 		angle := &(g.O.T.R)
 		movSpeed := g.MoveSpeed
-		win := g.O.E.Win
-		cam := g.O.E.Cam
-		dt := g.O.E.DT
+		win := eng.Win
+		cam := eng.Cam
+		dt := eng.DT
 		if win.Pressed(pixelgl.MouseButtonLeft){
 			click := win.MousePosition().Add(cam.T.P)
 			direction := click.Sub(*pos)
@@ -54,18 +60,18 @@ func
 }
 
 func
-(c *Camera)Start() {
+(c *CameraPlayer)Start() {
 }
 
 func
-(c *Camera)Update() {
+(c *CameraPlayer)Update() {
 	var(
-		vec pixel.Vec
+		vec vector.Vector
 		r float64
 	)
-	t := &(c.O.E.Cam.T)
-	dt := c.O.E.DT
-	win := c.O.E.Win
+	t := &(eng.Cam.T)
+	dt := eng.DT
+	win := eng.Win
 	vec = pixel.V(0, 1)
 	one := float64(0)
 
@@ -102,37 +108,37 @@ func
 	}
 }
 
-func (g *GopherPlayer)GetO() *engine.Object {return g.O}
-func (g *Camera)GetO() *engine.Object {return g.O}
+func (g *GopherPlayer)GetO() *object.Object {return g.O}
+func (g *CameraPlayer)GetO() *object.Object {return nil}
 
 func
 main(){
-	eng := engine.New(pixelgl.WindowConfig{
+	eng = engine.New(pixelgl.WindowConfig{
 		Title: "Gopher Test",
 		Bounds: pixel.R(0, 0, 1024, 768),
 		VSync: true,
 	})
 
-	goph_sprite, err := sprite.LoadSprite("media/hiking.png")
+	goph_sprite, err := sprite.Load("media/hiking.png")
 	if err != nil {
 		panic(err)
 	}
 
 	goph_player := GopherPlayer{
-		O: &engine.Object {
-			T: engine.Transform {
-				P: eng.WinCfg.Bounds.Center(),
-				S: pixel.Vec{1, 0.33},
-			},
-			S: goph_sprite,
-		},
+		O: object.New(
+			transform.New(
+				eng.WinCfg.Bounds.Center(),
+				pixel.Vec{1, 0.33},
+				0),
+			goph_sprite,
+		),
 		MoveSpeed: 200.0,
 	}
-	eng.AddObject(&goph_player)
+	eng.AddBehaviorer(&goph_player)
 	
 	goph_player1 := GopherPlayer{
-		O: &engine.Object {
-			T: engine.Transform {
+		O: &object.Object {
+			T: transform.Transform {
 				P: pixel.ZV,
 				S: pixel.Vec{0.35, 0.35},
 			},
@@ -140,14 +146,13 @@ main(){
 		},
 		MoveSpeed: 100.0,
 	}
-	eng.AddObject(&goph_player1)
+	eng.AddBehaviorer(&goph_player1)
 	
-	cam := Camera {
-		O: &engine.Object{},
+	cam := CameraPlayer {
 		RotationSpeed: 4,
 		PositionSpeed: 200,
 	}
-	eng.AddObject(&cam)
+	eng.AddBehaviorer(&cam)
 
 	eng.Run()
 }

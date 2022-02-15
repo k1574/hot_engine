@@ -1,4 +1,4 @@
-module hot_engine
+module hot
 
 go 1.17
 

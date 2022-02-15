@@ -7,8 +7,10 @@ import (
 	_ "image/png"
 )
 
+type Sprite = pixel.Sprite
+
 func 
-LoadSprite(path string) (*pixel.Sprite, error) {
+Load(path string) (*pixel.Sprite, error) {
 	file, err := os.Open(path)
 	if err != nil {
 		return nil, err
