@@ -11,6 +11,8 @@ import (
 	"hot/m/engine/transform"
 	"hot/m/engine/vector"
 	"hot/m/engine/behaviorer"
+	"hot/m/engine/matrix"
+	"hot/m/engine/object"
 )
 
 type Engine struct {
@@ -35,20 +37,32 @@ func
 				continue
 			}
 
-			finmat := pixel.IM.ScaledXY(pixel.ZV, od.T.S).
-				Rotated(vector.Z, od.T.R).
-				Moved(od.T.P).
-				Rotated(eng.Cam.T.P.Add(eng.Win.Bounds().Center()),
-					eng.Cam.T.R).
-				Moved(vector.Z.Sub(eng.Cam.T.P)).
-				ScaledXY(eng.Cam.T.P.Add(eng.Win.Bounds().Center()),
-					eng.Cam.T.S)
-
 			if od.S != nil {
+				finmat := eng.FromAbsToRealMatrix(od)
 				od.S.Draw(eng.Win, finmat)
 			}
 		}
 		eng.Win.Update()
+}
+
+func
+(eng *Engine)FromAbsToRealMatrix(od *object.Object) matrix.Matrix {
+	finmat := pixel.IM.ScaledXY(pixel.ZV, od.T.S).
+		Rotated(vector.Z, od.T.R).
+		Moved(od.T.P).
+		Chained(eng.Cam.FromAbsToRealMatrix())
+
+	return finmat
+}
+
+/* Convert position from real to absolute.
+	Real values mean that it how sprites are drawn.
+	Absolute are values which the engine works with. */
+func
+(eng *Engine)FromRealToAbsVector(v vector.Vector) vector.Vector {
+	return v.ScaledXY(vector.New(1/eng.Cam.T.S.X, 1/eng.Cam.T.S.Y)).
+		Add(eng.Cam.T.P).
+		Rotated(-eng.Cam.T.R)
 }
 
 func
@@ -73,7 +87,7 @@ New(cfg pixelgl.WindowConfig) (*Engine) {
 				vector.New(1, 1),
 				vector.New(1, 1),
 				0),
-			),
+			cfg.Bounds.Center()),
 	}
 
 	return &eng
