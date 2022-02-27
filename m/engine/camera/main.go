@@ -33,7 +33,7 @@ func
 
 func
 (cam *Camera)FromAbsToRealMatrix() matrix.Matrix {
-	return matrix.IM.Rotated(cam.T.P.Add(cam.Around),
+	return matrix.I.Rotated(cam.T.P.Add(cam.Around),
 			cam.T.R).
 		Moved(vector.Z.Sub(cam.T.P)).
 		ScaledXY(cam.T.P.Add(cam.Around), cam.T.S)

@@ -26,6 +26,7 @@ type Engine struct {
 
 func
 (eng *Engine)update(){
+		var finmat = matrix.I
 		eng.Win.Clear(colornames.Whitesmoke)
 		eng.setNewDT()
 		for e := eng.Objects.Front() ; e != nil ; e = e.Next() {
@@ -38,7 +39,7 @@ func
 			}
 
 			if od.S != nil {
-				finmat := eng.FromAbsToRealMatrix(od)
+				finmat = eng.FromAbsToRealMatrix(od)
 				od.S.Draw(eng.Win, finmat)
 			}
 		}
@@ -49,8 +50,12 @@ func
 (eng *Engine)FromAbsToRealMatrix(od *object.Object) matrix.Matrix {
 	finmat := pixel.IM.ScaledXY(pixel.ZV, od.T.S).
 		Rotated(vector.Z, od.T.R).
-		Moved(od.T.P).
-		Chained(eng.Cam.FromAbsToRealMatrix())
+		Moved(od.T.P)
+
+	/* To be able work with GUI or floating shit. */
+	if !od.Floating {
+		finmat = finmat.Chained(eng.Cam.FromAbsToRealMatrix())
+	}
 
 	return finmat
 }

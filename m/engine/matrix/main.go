@@ -7,5 +7,5 @@ import(
 type Matrix = pixel.Matrix
 
 var(
-	IM = pixel.IM
+	I = pixel.IM
 )

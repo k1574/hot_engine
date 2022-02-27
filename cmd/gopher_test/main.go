@@ -39,8 +39,13 @@ func
 		cam := eng.Cam
 		dt := eng.DT
 		if win.Pressed(pixelgl.MouseButtonLeft){
+			var real vector.Vector
 			click := win.MousePosition()
-			real := eng.Cam.FromRealToAbsVector(click)
+			if !g.O.Floating {
+				real = cam.FromRealToAbsVector(click)
+			} else {
+				real = click
+			}
 			fmt.Println(real)
 			direction := real.Sub(*pos)
 			*angle = math.Atan(direction.Y/direction.X)
@@ -48,16 +53,16 @@ func
 
 		}
 		if win.Pressed(pixelgl.KeyW){
-			cam.T.P.Y += movSpeed*dt
+			pos.Y += dt*movSpeed
 		}
 		if win.Pressed(pixelgl.KeyS){
-			cam.T.P.Y -= movSpeed*dt
+			pos.Y -= movSpeed*dt
 		}
 		if win.Pressed(pixelgl.KeyD){
-			cam.T.P.X += movSpeed*dt
+			pos.X += movSpeed*dt
 		}
 		if win.Pressed(pixelgl.KeyA){
-			cam.T.P.X -= movSpeed*dt
+			pos.X -= movSpeed*dt
 		}
 }
 
@@ -133,7 +138,7 @@ main(){
 				pixel.Vec{1, 0.33},
 				0),
 			goph_sprite,
-		),
+			true),
 		MoveSpeed: 200.0,
 	}
 	eng.AddBehaviorer(&goph_player)
