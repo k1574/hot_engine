@@ -40,7 +40,9 @@ func
 		dt := eng.DT
 		if win.Pressed(pixelgl.MouseButtonLeft){
 			click := win.MousePosition()
-			direction := eng.FromRealToAbsVector(click).Sub(*pos)
+			real := eng.Cam.FromRealToAbsVector(click)
+			fmt.Println(real)
+			direction := real.Sub(*pos)
 			*angle = math.Atan(direction.Y/direction.X)
 			if direction.X < 0 { *angle += math.Pi }
 

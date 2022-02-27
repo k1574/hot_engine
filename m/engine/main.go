@@ -55,15 +55,6 @@ func
 	return finmat
 }
 
-/* Convert position from real to absolute.
-	Real values mean that it how sprites are drawn.
-	Absolute are values which the engine works with. */
-func
-(eng *Engine)FromRealToAbsVector(v vector.Vector) vector.Vector {
-	return v.ScaledXY(vector.New(1/eng.Cam.T.S.X, 1/eng.Cam.T.S.Y)).
-		Add(eng.Cam.T.P).
-		Rotated(-eng.Cam.T.R)
-}
 
 func
 (eng *Engine)setNewDT(){

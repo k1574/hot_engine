@@ -1,6 +1,7 @@
 package camera
 
 import(
+	//"github.com/faiface/pixel"
 	"hot/m/engine/transform"
 	"hot/m/engine/vector"
 	"hot/m/engine/matrix"
@@ -35,6 +36,13 @@ func
 	return matrix.IM.Rotated(cam.T.P.Add(cam.Around),
 			cam.T.R).
 		Moved(vector.Z.Sub(cam.T.P)).
-		ScaledXY(cam.T.P.Add(cam.Around),
-		cam.T.S)
+		ScaledXY(cam.T.P.Add(cam.Around), cam.T.S)
+}
+
+/* Convert position from real to absolute.
+	Real values mean that it how sprites are drawn.
+	Absolute are values which the engine works with. */
+func
+(cam *Camera)FromRealToAbsVector(v vector.Vector) vector.Vector {
+	return cam.FromAbsToRealMatrix().Unproject(v)
 }
