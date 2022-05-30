@@ -1,4 +1,4 @@
-module hot
+module github.com/k1574/hot
 
 go 1.17
 
@@ -11,4 +11,7 @@ require (
 	github.com/go-gl/mathgl v0.0.0-20190416160123-c4601bc793c7 // indirect
 	github.com/pkg/errors v0.8.1 // indirect
 	golang.org/x/image v0.0.0-20211028202545-6944b10bf410 // indirect
+	hot v0.0.0-00010101000000-000000000000 // indirect
 )
+
+replace hot => ./

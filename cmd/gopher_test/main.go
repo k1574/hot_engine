@@ -46,7 +46,6 @@ func
 			} else {
 				real = click
 			}
-			fmt.Println(real)
 			direction := real.Sub(*pos)
 			*angle = math.Atan(direction.Y/direction.X)
 			if direction.X < 0 { *angle += math.Pi }
@@ -109,8 +108,6 @@ func
 
 	if one != 0 {
 		vec = vec.Rotated(r)
-		fmt.Println(r)
-		fmt.Println(vec)
 		t.P = t.P.Add(vec.Scaled(dt * c.PositionSpeed))
 	}
 }
