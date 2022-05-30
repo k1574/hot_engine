@@ -2,7 +2,6 @@ package main
 
 import(
 	"math"
-	"fmt"
 	"github.com/faiface/pixel/pixelgl"
 	"github.com/faiface/pixel"
 	"hot/m/engine"
