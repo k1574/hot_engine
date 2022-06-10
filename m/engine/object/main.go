@@ -1,8 +1,8 @@
 package object
 
 import(
-	"hot/m/engine/transform"
-	"hot/m/engine/sprite"
+	"github.com/k1574/hot/m/engine/transform"
+	"github.com/k1574/hot/m/engine/sprite"
 )
 
 type Object struct {

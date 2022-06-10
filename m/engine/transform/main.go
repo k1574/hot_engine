@@ -1,7 +1,7 @@
 package transform
 
 import(
-	"hot/m/engine/vector"
+	"github.com/k1574/hot/m/engine/vector"
 )
 
 type Transform struct {

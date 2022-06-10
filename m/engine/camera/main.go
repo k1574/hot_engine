@@ -2,9 +2,9 @@ package camera
 
 import(
 	//"github.com/faiface/pixel"
-	"hot/m/engine/transform"
-	"hot/m/engine/vector"
-	"hot/m/engine/matrix"
+	"github.com/k1574/hot/m/engine/transform"
+	"github.com/k1574/hot/m/engine/vector"
+	"github.com/k1574/hot/m/engine/matrix"
 )
 
 type Camera struct {

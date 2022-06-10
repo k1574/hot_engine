@@ -1,7 +1,7 @@
 package behaviorer
 
 import(
-	"hot/m/engine/object"
+	"github.com/k1574/hot/m/engine/object"
 )
 
 type Behaviorer interface {
