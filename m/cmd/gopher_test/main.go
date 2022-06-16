@@ -13,6 +13,7 @@ import(
 
 var(
 	eng *engine.Engine
+	goph_player1 GopherPlayer
 )
 
 type GopherPlayer struct {
@@ -37,31 +38,30 @@ func
 		win := eng.Win
 		cam := eng.Cam
 		dt := eng.DT
-		if win.Pressed(pixelgl.MouseButtonLeft){
-			var real vector.Vector
-			click := win.MousePosition()
-			if !g.O.Floating {
-				real = cam.FromRealToAbsVector(click)
-			} else {
-				real = click
-			}
-			direction := real.Sub(*pos)
-			*angle = math.Atan(direction.Y/direction.X)
-			if direction.X < 0 { *angle += math.Pi }
-
+	if win.Pressed(pixelgl.MouseButtonLeft){
+		var real vector.Vector
+		click := win.MousePosition()
+		if !g.O.Floating {
+			real = cam.FromRealToAbsVector(click)
+		} else {
+		real = click
 		}
-		if win.Pressed(pixelgl.KeyW){
-			pos.Y += dt*movSpeed
-		}
-		if win.Pressed(pixelgl.KeyS){
-			pos.Y -= movSpeed*dt
-		}
-		if win.Pressed(pixelgl.KeyD){
-			pos.X += movSpeed*dt
-		}
-		if win.Pressed(pixelgl.KeyA){
-			pos.X -= movSpeed*dt
-		}
+		direction := real.Sub(*pos)
+		*angle = math.Atan(direction.Y/direction.X)
+		if direction.X < 0 { *angle += math.Pi }
+	}
+	if win.Pressed(pixelgl.KeyW){
+		pos.Y += movSpeed*dt
+	}
+	if win.Pressed(pixelgl.KeyS){
+		pos.Y -= movSpeed*dt
+	}
+	if win.Pressed(pixelgl.KeyD){
+		pos.X += movSpeed*dt
+	}
+	if win.Pressed(pixelgl.KeyA){
+		pos.X -= movSpeed*dt
+	}
 }
 
 func
@@ -71,14 +71,10 @@ func
 func
 (c *CameraPlayer)Update() {
 	var(
-		vec vector.Vector
-		r float64
 	)
 	t := &(eng.Cam.T)
 	dt := eng.DT
 	win := eng.Win
-	vec = pixel.V(0, 1)
-	one := float64(0)
 
 	if win.Pressed(pixelgl.KeyPageUp){
 		t.R += dt * c.RotationSpeed
@@ -87,28 +83,8 @@ func
 		t.R -= dt * c.RotationSpeed
 	}
 
-
-	r = -t.R
-	if win.Pressed(pixelgl.KeyUp){
-		one = 1
-	}
-	if win.Pressed(pixelgl.KeyDown){
-		one = 1
-		r += math.Pi
-	}
-	if win.Pressed(pixelgl.KeyLeft){
-		one = 1
-		r += math.Pi/2
-	}
-	if win.Pressed(pixelgl.KeyRight){
-		one = 1
-		r -= math.Pi/2
-	}
-
-	if one != 0 {
-		vec = vec.Rotated(r)
-		t.P = t.P.Add(vector.Mul(vec, dt * c.PositionSpeed))
-	}
+	x, y := goph_player1.GetO().T.P.XY()
+	t.P = vector.V(x-512, y-384)
 }
 
 func (g *GopherPlayer)GetO() *object.Object {return g.O}
@@ -122,7 +98,7 @@ main(){
 		VSync: true,
 	})
 
-	goph_sprite, err := sprite.Load("media/hiking.png")
+	goph_sprite, err := sprite.Load("media/player1.png")
 	if err != nil {
 		panic(err)
 	}
@@ -134,12 +110,12 @@ main(){
 				pixel.Vec{1, 0.33},
 				0),
 			goph_sprite,
-			true),
-		MoveSpeed: 200.0,
+			false),
+		MoveSpeed: 0.,
 	}
 	eng.AddBehaviorer(&goph_player)
 	
-	goph_player1 := GopherPlayer{
+	goph_player1 = GopherPlayer{
 		O: &object.Object {
 			T: transform.Transform {
 				P: pixel.ZV,
