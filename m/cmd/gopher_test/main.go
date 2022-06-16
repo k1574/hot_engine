@@ -107,7 +107,7 @@ func
 
 	if one != 0 {
 		vec = vec.Rotated(r)
-		t.P = t.P.Add(vec.Scaled(dt * c.PositionSpeed))
+		t.P = t.P.Add(vector.Mul(vec, dt * c.PositionSpeed))
 	}
 }
 
