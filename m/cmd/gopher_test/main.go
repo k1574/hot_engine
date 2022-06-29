@@ -14,7 +14,11 @@ import(
 var(
 	eng *engine.Engine
 	goph_player1 GopherPlayer
+	goph_sprite *sprite.Sprite
 )
+type Gopher struct {
+	O *object.Object
+}
 
 type GopherPlayer struct {
 	O *object.Object
@@ -24,6 +28,12 @@ type GopherPlayer struct {
 type CameraPlayer struct {
 	RotationSpeed float64
 	PositionSpeed float64
+}
+
+func (g *Gopher)Start() {
+}
+
+func (g *Gopher)Update() {
 }
 
 func
@@ -73,6 +83,7 @@ func
 	var(
 	)
 	t := &(eng.Cam.T)
+	cam := eng.Cam
 	dt := eng.DT
 	win := eng.Win
 
@@ -83,22 +94,34 @@ func
 		t.R -= dt * c.RotationSpeed
 	}
 
+	if win.Pressed(pixelgl.MouseButtonLeft){
+		var real vector.Vector
+		click := win.MousePosition()
+		real = cam.FromRealToAbsVector(click)
+		goph := Gopher{}
+		goph.O = &object.Object{}
+		goph.O.S = goph_sprite
+		goph.O.T = transform.Transform{P: real, S:vector.Vector{1, 1}, R: 0}
+		eng.AddBehaviorer(&goph)
+	}
 	x, y := goph_player1.GetO().T.P.XY()
 	t.P = vector.V(x-512, y-384)
 }
 
 func (g *GopherPlayer)GetO() *object.Object {return g.O}
 func (g *CameraPlayer)GetO() *object.Object {return nil}
+func (g *Gopher)GetO() *object.Object {return g.O}
 
 func
 main(){
+	var err error
 	eng = engine.New(pixelgl.WindowConfig{
 		Title: "Gopher Test",
 		Bounds: pixel.R(0, 0, 1024, 768),
 		VSync: true,
 	})
 
-	goph_sprite, err := sprite.Load("media/player1.png")
+	goph_sprite, err = sprite.Load("media/player1.png")
 	if err != nil {
 		panic(err)
 	}
