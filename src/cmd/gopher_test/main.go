@@ -4,11 +4,11 @@ import(
 	"math"
 	"github.com/faiface/pixel/pixelgl"
 	"github.com/faiface/pixel"
-	"github.com/k1574/hot/m/engine"
-	"github.com/k1574/hot/m/engine/sprite"
-	"github.com/k1574/hot/m/engine/object"
-	"github.com/k1574/hot/m/engine/vector"
-	"github.com/k1574/hot/m/engine/transform"
+	"github.com/surdeus/hot/src/engine"
+	"github.com/surdeus/hot/src/engine/sprite"
+	"github.com/surdeus/hot/src/engine/object"
+	"github.com/surdeus/hot/src/engine/vector"
+	"github.com/surdeus/hot/src/engine/transform"
 )
 
 var(

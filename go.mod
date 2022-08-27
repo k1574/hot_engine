@@ -1,4 +1,4 @@
-module github.com/k1574/hot
+module github.com/surdeus/hot
 
 go 1.17
 

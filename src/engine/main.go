@@ -7,12 +7,12 @@ import (
 	"github.com/faiface/pixel"
 	"github.com/faiface/pixel/pixelgl"
 	"golang.org/x/image/colornames"
-	"github.com/k1574/hot/m/engine/camera"
-	"github.com/k1574/hot/m/engine/transform"
-	"github.com/k1574/hot/m/engine/vector"
-	"github.com/k1574/hot/m/engine/behaviorer"
-	"github.com/k1574/hot/m/engine/matrix"
-	"github.com/k1574/hot/m/engine/object"
+	"github.com/surdeus/hot/src/engine/camera"
+	"github.com/surdeus/hot/src/engine/transform"
+	"github.com/surdeus/hot/src/engine/vector"
+	"github.com/surdeus/hot/src/engine/behaviorer"
+	"github.com/surdeus/hot/src/engine/matrix"
+	"github.com/surdeus/hot/src/engine/object"
 )
 
 type Engine struct {
