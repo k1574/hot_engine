@@ -1,19 +1,24 @@
 package main
 
 import(
+	"fmt"
 	"math"
 	"github.com/faiface/pixel/pixelgl"
 	"github.com/faiface/pixel"
 	"github.com/surdeus/hot/src/engine"
-	"github.com/surdeus/hot/src/engine/sprite"
 	"github.com/surdeus/hot/src/engine/object"
 	"github.com/surdeus/hot/src/engine/vector"
 	"github.com/surdeus/hot/src/engine/transform"
+	"github.com/surdeus/hot/src/engine/picture"
+	"github.com/surdeus/hot/src/engine/sprite"
 )
 
 var(
+	counter int
 	eng *engine.Engine
 	goph_player1 GopherPlayer
+	goph_picture *pixel.Picture
+	goph_batch *pixel.Batch
 	goph_sprite *sprite.Sprite
 )
 type Gopher struct {
@@ -101,8 +106,12 @@ func
 		goph := Gopher{}
 		goph.O = &object.Object{}
 		goph.O.S = goph_sprite
+		goph.O.P = goph_picture
+		goph.O.B = goph_batch
 		goph.O.T = transform.Transform{P: real, S:vector.Vector{1, 1}, R: 0}
 		eng.AddBehaviorer(&goph)
+		counter++
+		fmt.Println(counter)
 	}
 	x, y := goph_player1.GetO().T.P.XY()
 	t.P = vector.V(x-512, y-384)
@@ -121,10 +130,14 @@ main(){
 		VSync: true,
 	})
 
-	goph_sprite, err = sprite.Load("media/player1.png")
+	goph_pic, err := picture.Load("media/player1.png")
+	goph_picture = &goph_pic
+	goph_batch = pixel.NewBatch(&pixel.TrianglesData{}, *goph_picture)
 	if err != nil {
 		panic(err)
 	}
+
+	goph_sprite = pixel.NewSprite(*goph_picture, (*goph_picture).Bounds())
 
 	goph_player := GopherPlayer{
 		O: object.New(
@@ -132,9 +145,11 @@ main(){
 				eng.WinCfg.Bounds.Center(),
 				pixel.Vec{1, 0.33},
 				0),
+			goph_picture,
 			goph_sprite,
+			goph_batch,
 			false),
-		MoveSpeed: 0.,
+		MoveSpeed: 0. ,
 	}
 	eng.AddBehaviorer(&goph_player)
 	
@@ -144,7 +159,9 @@ main(){
 				P: pixel.ZV,
 				S: pixel.Vec{0.35, 0.35},
 			},
+			P: goph_picture,
 			S: goph_sprite,
+			B: goph_batch,
 		},
 		MoveSpeed: 100.0,
 	}
@@ -155,6 +172,8 @@ main(){
 		PositionSpeed: 200,
 	}
 	eng.AddBehaviorer(&cam)
+
+	eng.AddBatch(goph_batch)
 
 	eng.Run()
 }

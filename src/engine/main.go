@@ -18,6 +18,7 @@ import (
 type Engine struct {
 	lastTime time.Time
 	Objects *list.List
+	Batches []*pixel.Batch
 	DT float64
 	WinCfg pixelgl.WindowConfig
 	Win *pixelgl.Window
@@ -29,6 +30,14 @@ func
 		var finmat = matrix.I
 		eng.Win.Clear(colornames.Whitesmoke)
 		eng.setNewDT()
+
+		for _, b := range eng.Batches {
+			b.Clear()
+		}
+
+		// Drawing objects to it's batches.
+		// Could be way simpler if we used just one batch and spritesheet,
+		// but I like keeping sprites in different files, so...
 		for e := eng.Objects.Front() ; e != nil ; e = e.Next() {
 			o := e.Value.(behaviorer.Behaviorer)
 			o.Update()
@@ -38,11 +47,17 @@ func
 				continue
 			}
 
-			if od.S != nil {
+			if od.P != nil {
 				finmat = eng.FromAbsToRealMatrix(od)
-				od.S.Draw(eng.Win, finmat)
+				od.S.Draw(od.B, finmat)
 			}
 		}
+
+		// Drawing batches themselves.
+		for _, b := range eng.Batches {
+			b.Draw(eng.Win)
+		}
+
 		eng.Win.Update()
 }
 
@@ -60,7 +75,6 @@ func
 	return finmat
 }
 
-
 func
 (eng *Engine)setNewDT(){
 	eng.DT = time.Since(eng.lastTime).Seconds()
@@ -71,6 +85,10 @@ func
 (eng *Engine)AddBehaviorer(v behaviorer.Behaviorer) {
 	eng.Objects.PushBack(v)
 	v.Start()
+}
+
+func (eng *Engine)AddBatch(b *pixel.Batch) {
+	eng.Batches = append(eng.Batches, b)
 }
 
 func
