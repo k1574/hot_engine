@@ -108,7 +108,7 @@ func
 		goph.O.S = goph_sprite
 		goph.O.P = goph_picture
 		goph.O.B = goph_batch
-		goph.O.T = transform.Transform{P: real, S:vector.Vector{1, 1}, R: 0}
+		goph.O.T = transform.Transform{P: real, S:vector.Vector{.25, .25}, R: 0}
 		eng.AddBehaviorer(&goph)
 		counter++
 		fmt.Println(counter)
