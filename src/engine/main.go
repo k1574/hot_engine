@@ -42,7 +42,7 @@ func
 			o := e.Value.(behaviorer.Behaviorer)
 			o.Update()
 
-			od := o.GetO()
+			od := o.O()
 			if od == nil {
 				continue
 			}

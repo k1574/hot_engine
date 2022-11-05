@@ -7,5 +7,5 @@ import(
 type Behaviorer interface {
 	Update()
 	Start()
-	GetO() *object.Object
+	O() *object.Object
 }

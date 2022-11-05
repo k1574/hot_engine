@@ -26,3 +26,8 @@ New(t transform.Transform, p *pixel.Picture, s  *sprite.Sprite,
 	}
 	return o
 }
+
+func (o *Object)O() *Object {
+	return o
+}
+
