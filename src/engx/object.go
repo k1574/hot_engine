@@ -1,8 +1,6 @@
-package object
+package engx
 
 import(
-	"github.com/surdeus/hot/src/engine/transform"
-	"github.com/surdeus/hot/src/engine/sprite"
 	"github.com/faiface/pixel"
 )
 
@@ -15,7 +13,7 @@ type Object struct {
 }
 
 func
-New(t transform.Transform, p *pixel.Picture, s  *sprite.Sprite,
+NewObject(t transform.Transform, p *pixel.Picture, s  *sprite.Sprite,
 		b *pixel.Batch, f bool) *Object {
 	o := &Object {
 		T: t,

@@ -1,4 +1,4 @@
-package matrix
+package engx
 
 import(
 	"github.com/faiface/pixel"
@@ -7,5 +7,5 @@ import(
 type Matrix = pixel.Matrix
 
 var(
-	I = pixel.IM
+	IM = pixel.IM
 )

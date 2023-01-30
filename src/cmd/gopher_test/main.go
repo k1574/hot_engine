@@ -6,11 +6,7 @@ import(
 	"github.com/faiface/pixel/pixelgl"
 	"github.com/faiface/pixel"
 	"github.com/surdeus/hot/src/engine"
-	"github.com/surdeus/hot/src/engine/object"
-	"github.com/surdeus/hot/src/engine/vector"
-	"github.com/surdeus/hot/src/engine/transform"
-	"github.com/surdeus/hot/src/engine/picture"
-	"github.com/surdeus/hot/src/engine/sprite"
+	"github.com/surdeus/hot/src/engine/picturex"
 )
 
 var(
@@ -138,7 +134,7 @@ main(){
 
 	goph_player := GopherPlayer{
 		Object: object.New(
-			transform.New(
+			enginex.NewT(
 				eng.WinCfg.Bounds.Center(),
 				pixel.Vec{1, 0.33},
 				0,

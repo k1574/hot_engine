@@ -1,4 +1,4 @@
-package behaviorer
+package engx
 
 import(
 	"github.com/surdeus/hot/src/engine/object"

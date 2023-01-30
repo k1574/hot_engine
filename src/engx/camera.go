@@ -1,30 +1,27 @@
-package camera
+package engx
 
 import(
 	//"github.com/faiface/pixel"
-	"github.com/surdeus/hot/src/engine/transform"
-	"github.com/surdeus/hot/src/engine/vector"
-	"github.com/surdeus/hot/src/engine/matrix"
 )
 
 type Camera struct {
-	T transform.Transform
-	Around vector.Vector
+	T Transform
+	Around Vector
 }
 
 func
-New(T transform.Transform, Around vector.Vector) *Camera {
+NewCamera(T Transform, Around Vector) *Camera {
 	c := &Camera{T, Around, }
 	return c
 }
 
-func
+/*func
 (cam *Camera)Rotate(r float64){
-}
+}*/
 
 /* Returns physical(in engine) vector of camera view plus the r value. */
 func
-(cam *Camera)VecOfView(r float64) vector.Vector {
+(cam *Camera)VecOfView(r float64) Vector {
 	vec := vector.New(0, 1)
 	r -= cam.T.R
 	vec = vec.Rotated(r)
@@ -32,7 +29,7 @@ func
 }
 
 func
-(cam *Camera)FromAbsToRealMatrix() matrix.Matrix {
+(cam *Camera)FromAbsToRealMatrix() Matrix {
 	return matrix.I.Rotated(cam.T.P.Add(cam.Around),
 			cam.T.R).
 		Moved(vector.Z.Sub(cam.T.P)).
@@ -43,6 +40,6 @@ func
 	Real values mean that it how sprites are drawn.
 	Absolute are values which the engine works with. */
 func
-(cam *Camera)FromRealToAbsVector(v vector.Vector) vector.Vector {
+(cam *Camera)FromRealToAbsVector(v Vector) Vector {
 	return cam.FromAbsToRealMatrix().Unproject(v)
 }

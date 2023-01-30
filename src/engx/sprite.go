@@ -10,7 +10,7 @@ import (
 type Sprite = pixel.Sprite
 
 func 
-Load(path string) (*pixel.Sprite, error) {
+LoadSprite(path string) (*Sprite, error) {
 	file, err := os.Open(path)
 	if err != nil {
 		return nil, err

@@ -1,4 +1,4 @@
-package transform
+package enginex
 
 import(
 	"github.com/surdeus/hot/src/engine/vector"
@@ -10,7 +10,7 @@ type Transform struct {
 }
 
 func
-New(P, S vector.Vector, R float64) Transform {
+NewT(P, S vector.Vector, R float64) Transform {
 	t := Transform {P, S, R, }
 	return t
 }

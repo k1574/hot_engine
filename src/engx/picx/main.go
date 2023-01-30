@@ -1,4 +1,4 @@
-package picture
+package picx
 
 import (
 	"os"

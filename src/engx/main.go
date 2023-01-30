@@ -1,4 +1,4 @@
-package engine
+package engx
 
 import (
 	"container/list"
@@ -7,12 +7,6 @@ import (
 	"github.com/faiface/pixel"
 	"github.com/faiface/pixel/pixelgl"
 	"golang.org/x/image/colornames"
-	"github.com/surdeus/hot/src/engine/camera"
-	"github.com/surdeus/hot/src/engine/transform"
-	"github.com/surdeus/hot/src/engine/vector"
-	"github.com/surdeus/hot/src/engine/behaviorer"
-	"github.com/surdeus/hot/src/engine/matrix"
-	"github.com/surdeus/hot/src/engine/object"
 )
 
 type Engine struct {
