@@ -1,4 +1,4 @@
-package sprite
+package engx
 
 import (
 	"github.com/faiface/pixel"

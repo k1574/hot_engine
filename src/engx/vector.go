@@ -1,4 +1,4 @@
-package enginex
+package engx
 
 import(
 	"github.com/faiface/pixel"

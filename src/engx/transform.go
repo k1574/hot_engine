@@ -1,16 +1,16 @@
-package enginex
-
-import(
-	"github.com/surdeus/hot/src/engine/vector"
-)
+package engx
 
 type Transform struct {
-	P, S vector.Vector
+	P, S Vector
 	R float64
 }
 
+var (
+	T = NewTransform
+)
+
 func
-NewT(P, S vector.Vector, R float64) Transform {
+NewTransform(P, S Vector, R float64) Transform {
 	t := Transform {P, S, R, }
 	return t
 }

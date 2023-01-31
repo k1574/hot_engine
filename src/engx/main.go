@@ -16,12 +16,12 @@ type Engine struct {
 	DT float64
 	WinCfg pixelgl.WindowConfig
 	Win *pixelgl.Window
-	Cam *camera.Camera
+	Cam *Camera
 }
 
 func
 (eng *Engine)update(){
-		var finmat = matrix.I
+		var finmat = IM
 		eng.Win.Clear(colornames.Whitesmoke)
 		eng.setNewDT()
 
@@ -33,7 +33,7 @@ func
 		// Could be way simpler if we used just one batch and spritesheet,
 		// but I like keeping sprites in different files, so...
 		for e := eng.Objects.Front() ; e != nil ; e = e.Next() {
-			o := e.Value.(behaviorer.Behaviorer)
+			o := e.Value.(Behaviorer)
 			o.Update()
 
 			od := o.O()
@@ -56,9 +56,9 @@ func
 }
 
 func
-(eng *Engine)FromAbsToRealMatrix(od *object.Object) matrix.Matrix {
+(eng *Engine)FromAbsToRealMatrix(od *Object) Matrix {
 	finmat := pixel.IM.ScaledXY(pixel.ZV, od.T.S).
-		Rotated(vector.Z, od.T.R).
+		Rotated(ZV, od.T.R).
 		Moved(od.T.P)
 
 	/* To be able work with GUI or floating shit. */
@@ -76,7 +76,7 @@ func
 }
 
 func
-(eng *Engine)AddBehaviorer(v behaviorer.Behaviorer) {
+(eng *Engine)AddBehaviorer(v Behaviorer) {
 	eng.Objects.PushBack(v)
 	v.Start()
 }
@@ -90,11 +90,12 @@ New(cfg pixelgl.WindowConfig) (*Engine) {
 	eng := Engine {
 		Objects: list.New(),
 		WinCfg: cfg,
-		Cam: camera.New(
-			transform.New(
-				vector.New(1, 1),
-				vector.New(1, 1),
-				0),
+		Cam: NewCamera(
+			T(
+				V(1, 1),
+				V(1, 1),
+				0,
+			),
 			cfg.Bounds.Center()),
 	}
 

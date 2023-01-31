@@ -5,15 +5,15 @@ import(
 )
 
 type Object struct {
-	T transform.Transform
+	T Transform
 	P *pixel.Picture
-	S *pixel.Sprite
+	S *Sprite
 	B *pixel.Batch
 	Floating bool
 }
 
 func
-NewObject(t transform.Transform, p *pixel.Picture, s  *sprite.Sprite,
+NewObject(t Transform, p *pixel.Picture, s  *Sprite,
 		b *pixel.Batch, f bool) *Object {
 	o := &Object {
 		T: t,
@@ -29,3 +29,8 @@ func (o *Object)O() *Object {
 	return o
 }
 
+func (o *Object) Update() {
+}
+
+func (o *Object) Start() {
+}

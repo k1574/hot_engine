@@ -5,8 +5,8 @@ import(
 	"math"
 	"github.com/faiface/pixel/pixelgl"
 	"github.com/faiface/pixel"
-	"github.com/surdeus/hot/src/engine"
-	"github.com/surdeus/hot/src/engine/picturex"
+	"github.com/surdeus/hot/src/engx"
+	"github.com/surdeus/hot/src/engx/picx"
 )
 
 var(
@@ -18,7 +18,7 @@ var(
 	goph_sprite *sprite.Sprite
 )
 type Gopher struct {
-	*object.Object
+	*engx.Object
 }
 
 type GopherPlayer struct {

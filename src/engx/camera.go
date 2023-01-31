@@ -22,7 +22,7 @@ NewCamera(T Transform, Around Vector) *Camera {
 /* Returns physical(in engine) vector of camera view plus the r value. */
 func
 (cam *Camera)VecOfView(r float64) Vector {
-	vec := vector.New(0, 1)
+	vec := V(0, 1)
 	r -= cam.T.R
 	vec = vec.Rotated(r)
 	return vec
@@ -30,9 +30,9 @@ func
 
 func
 (cam *Camera)FromAbsToRealMatrix() Matrix {
-	return matrix.I.Rotated(cam.T.P.Add(cam.Around),
+	return IM.Rotated(cam.T.P.Add(cam.Around),
 			cam.T.R).
-		Moved(vector.Z.Sub(cam.T.P)).
+		Moved(ZV.Sub(cam.T.P)).
 		ScaledXY(cam.T.P.Add(cam.Around), cam.T.S)
 }
 
