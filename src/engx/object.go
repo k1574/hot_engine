@@ -12,6 +12,10 @@ type Object struct {
 	Floating bool
 }
 
+var (
+	O = NewObject
+)
+
 func
 NewObject(t Transform, p *pixel.Picture, s  *Sprite,
 		b *pixel.Batch, f bool) *Object {

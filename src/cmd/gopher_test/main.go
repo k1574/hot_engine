@@ -11,23 +11,23 @@ import(
 
 var(
 	counter int
-	eng *engine.Engine
+	eng *engx.Engine
 	goph_player1 GopherPlayer
 	goph_picture *pixel.Picture
 	goph_batch *pixel.Batch
-	goph_sprite *sprite.Sprite
+	goph_sprite *engx.Sprite
 )
 type Gopher struct {
 	*engx.Object
 }
 
 type GopherPlayer struct {
-	*object.Object
+	*engx.Object
 	MoveSpeed float64
 }
 
 type CameraPlayer struct {
-	*object.Object
+	*engx.Object
 	RotationSpeed float64
 	PositionSpeed float64
 }
@@ -51,7 +51,7 @@ func
 		cam := eng.Cam
 		dt := eng.DT
 	if win.Pressed(pixelgl.MouseButtonLeft){
-		var real vector.Vector
+		var real engx.Vector
 		click := win.MousePosition()
 		if !g.O().Floating {
 			real = cam.FromRealToAbsVector(click)
@@ -97,33 +97,37 @@ func
 	}
 
 	if win.Pressed(pixelgl.MouseButtonLeft){
-		var real vector.Vector
+		var real engx.Vector
 		click := win.MousePosition()
 		real = cam.FromRealToAbsVector(click)
 		goph := Gopher{}
-		goph.Object = &object.Object{}
+		goph.Object = &engx.Object{}
 		goph.O().S = goph_sprite
 		goph.O().P = goph_picture
 		goph.O().B = goph_batch
-		goph.O().T = transform.Transform{P: real, S:vector.Vector{.25, .25}, R: 0}
+		goph.O().T = engx.Transform{
+			P: real,
+			S: engx.Vector{.25, .25},
+			R: 0,
+		}
 		eng.AddBehaviorer(&goph)
 		counter++
 		fmt.Println(counter)
 	}
 	x, y := goph_player1.O().T.P.XY()
-	t.P = vector.V(x-512, y-384)
+	t.P = engx.V(x-512, y-384)
 }
 
 func
 main(){
 	var err error
-	eng = engine.New(pixelgl.WindowConfig{
+	eng = engx.New(pixelgl.WindowConfig{
 		Title: "Gopher Test",
 		Bounds: pixel.R(0, 0, 1024, 768),
 		VSync: true,
 	})
 
-	goph_pic, err := picture.Load("media/player1.png")
+	goph_pic, err := picx.Load("media/player1.png")
 	goph_picture = &goph_pic
 	goph_batch = pixel.NewBatch(&pixel.TrianglesData{}, *goph_picture)
 	if err != nil {
@@ -133,8 +137,8 @@ main(){
 	goph_sprite = pixel.NewSprite(*goph_picture, (*goph_picture).Bounds())
 
 	goph_player := GopherPlayer{
-		Object: object.New(
-			enginex.NewT(
+		Object: engx.O(
+			engx.T(
 				eng.WinCfg.Bounds.Center(),
 				pixel.Vec{1, 0.33},
 				0,
@@ -149,8 +153,8 @@ main(){
 	eng.AddBehaviorer(&goph_player)
 	
 	goph_player1 = GopherPlayer{
-		Object: &object.Object {
-			T: transform.Transform {
+		Object: &engx.Object {
+			T: engx.Transform {
 				P: pixel.ZV,
 				S: pixel.Vec{0.35, 0.35},
 			},
